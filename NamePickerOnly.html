@@ -21,7 +21,13 @@
       <option value="Travel">Travel</option>
     </select>
     <button id="reroll-button">Reroll</button>
-    <button id="bw-toggle">Toggle B&W Mode</button>
+    <div id="mode-buttons">
+      <button id="normal-mode">Normal</button>
+      <button id="bw-mode">B&W</button>
+      <button id="prismatic-mode">Prismatic</button>
+      <button id="neon-mode">Neon</button>
+      <button id="cosmic-mode">Cosmic</button>
+    </div>
     <p id="selected-name"></p>
   </div>
 
@@ -47,6 +53,7 @@
       max-width: 500px;
       margin: 0 auto;
       transition: all 0.3s;
+      position: relative;
     }
 
     h2 {
@@ -65,12 +72,117 @@
     }
 
     .name-button {
-      background-color: #e0e0e0;
       border: 2px solid #000;
       padding: 0.5rem 1rem;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s, color 10s; /* Slowed down color transition */
+      transition: background-color 0.3s;
+      position: relative;
+    }
+
+    .normal-mode .name-button {
+      animation: normalShimmer 7s infinite ease-in-out;
+    }
+
+    @keyframes normalShimmer {
+      0% { color: #000000; }
+      50% { color: #FFFFFF; }
+      100% { color: #000000; }
+    }
+
+    .bw-mode, .bw-mode .name-button {
+      background-color: #fff !important;
+      color: #000 !important;
+      border-color: #000 !important;
+      animation: none !important;
+    }
+
+    .prismatic-mode .name-button:nth-child(1) { animation: rainbowPulse1 7s infinite; }
+    .prismatic-mode .name-button:nth-child(2) { animation: rainbowPulse2 7s infinite; }
+    .prismatic-mode .name-button:nth-child(3) { animation: rainbowPulse3 7s infinite; }
+
+    @keyframes rainbowPulse1 {
+      0% { background-color: #FF0000; color: #FFFFFF; }
+      20% { background-color: #FF8800; color: #000000; }
+      40% { background-color: #FFFF00; color: #000000; }
+      60% { background-color: #00FF00; color: #000000; }
+      80% { background-color: #0000FF; color: #FFFFFF; }
+      100% { background-color: #FF00FF; color: #FFFFFF; }
+    }
+
+    @keyframes rainbowPulse2 {
+      0% { background-color: #FFFF00; color: #000000; }
+      20% { background-color: #00FF00; color: #000000; }
+      40% { background-color: #0000FF; color: #FFFFFF; }
+      60% { background-color: #FF00FF; color: #FFFFFF; }
+      80% { background-color: #FF0000; color: #FFFFFF; }
+      100% { background-color: #FF8800; color: #000000; }
+    }
+
+    @keyframes rainbowPulse3 {
+      0% { background-color: #0000FF; color: #FFFFFF; }
+      20% { background-color: #FF00FF; color: #FFFFFF; }
+      40% { background-color: #FF0000; color: #FFFFFF; }
+      60% { background-color: #FF8800; color: #000000; }
+      80% { background-color: #FFFF00; color: #000000; }
+      100% { background-color: #00FF00; color: #000000; }
+    }
+
+    .neon-mode .name-button {
+      animation: neonPulse 2s infinite;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .neon-mode #name-picker {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      animation: neonGlow 2s infinite;
+    }
+
+    @keyframes neonPulse {
+      0% { filter: brightness(100%); box-shadow: 0 0 10px currentColor; }
+      50% { filter: brightness(150%); box-shadow: 0 0 20px currentColor; }
+      100% { filter: brightness(100%); box-shadow: 0 0 10px currentColor; }
+    }
+
+    @keyframes neonGlow {
+      0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+      50% { box-shadow: 0 0 20px rgba(255, 255, 255, 1); }
+      100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+    }
+
+    .cosmic-mode .name-button {
+      animation: cosmicTwinkle 3s infinite;
+    }
+
+    .cosmic-mode .name-button::before {
+      content: '⭐';
+      position: absolute;
+      top: -5px;
+      left: -10px;
+      font-size: 12px;
+      animation: starFade 2s infinite;
+    }
+
+    .cosmic-mode .name-button::after {
+      content: '⭐';
+      position: absolute;
+      bottom: -5px;
+      right: -10px;
+      font-size: 12px;
+      animation: starFade 2s infinite 1s;
+    }
+
+    @keyframes cosmicTwinkle {
+      0% { color: #4B0082; }
+      33% { color: #87CEEB; }
+      66% { color: #C0C0C0; }
+      100% { color: #4B0082; }
+    }
+
+    @keyframes starFade {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
     }
 
     .name-button:hover {
@@ -85,7 +197,7 @@
       font-size: 16px;
     }
 
-    #reroll-button, #bw-toggle {
+    #reroll-button, #mode-buttons button {
       background-color: #ff4444;
       border: 2px solid #000;
       color: #fff;
@@ -93,10 +205,10 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s;
-      margin: 0 0.5rem;
+      margin: 0.2rem;
     }
 
-    #reroll-button:hover, #bw-toggle:hover {
+    #reroll-button:hover, #mode-buttons button:hover {
       background-color: #cc0000;
     }
 
@@ -105,65 +217,95 @@
       margin-top: 1rem;
       transition: all 0.3s;
     }
-
-    .bw-mode {
-      background-color: #fff !important;
-      color: #000 !important;
-      border-color: #000 !important;
-    }
-
-    .bw-mode .name-button {
-      background-color: #fff !important;
-      color: #000 !important;
-    }
-
-    .bw-mode #reroll-button,
-    .bw-mode #bw-toggle {
-      background-color: #fff !important;
-      color: #000 !important;
-    }
   </style>
 
   <script>
-    const adjective = ['Vibrant', 'Lazy', 'Cheerful', 'Quirky', 'Gentle', 'Bold', 'Shy', 'Clever'];
-    const tnm1 = ['Amber', 'Amaranth', 'Amethyst', 'Apricot', 'Aqua', 'Aquamarine', 'Auburn', 'Azure', /* ... rest of your arrays ... */];
-    const tnm2 = ['#FFBF00', '#9F2B68', '#9966cc', '#FBCEB1', '#00FFFF', '#00FFBF', '#E87722', '#007FFF', /* ... rest of your arrays ... */];
-    const tnm3 = ['Ant', 'Badger', 'Bat', 'Bear', 'Beaver', 'Beetle', 'Bird', 'Bison', /* ... rest of your arrays ... */];
-    const tnm4 = ['🐜', '🦡', '🦇', '🐻', '🦫', '🪲', '🐦', '🦬', /* ... rest of your arrays ... */];
+    const baseAdjectives = ['Vibrant', 'Lazy', 'Cheerful', 'Quirky', 'Gentle', 'Bold', 'Shy', 'Clever'];
+    const prismaticAdjectives = ['Radiant', 'Shimmering', 'Iridescent', 'Gleaming', 'Prismatic'];
+    const neonAdjectives = ['Glowing', 'Electric', 'Buzzing', 'Pulsing', 'Flashing'];
+    const cosmicAdjectives = ['Stellar', 'Astral', 'Luminous', 'Celestial', 'Galactic'];
+
+    const baseColors = ['Amber', 'Amethyst', 'Aqua', 'Azure', 'Crimson', 'Emerald', 'Gold', 'Indigo'];
+    const baseColorHex = ['#FFBF00', '#9966cc', '#00FFFF', '#007FFF', '#DC143C', '#50C878', '#FFD700', '#4B0082'];
+    const prismaticColors = ['Rainbow', 'Prismatic', 'Iridescent', 'Chroma', 'Spectrum'];
+    const prismaticColorHex = ['#FF0000', '#FF00FF', '#00FFFF', '#FFFF00', '#00FF00'];
+    const neonColors = ['Neon', 'Glow', 'Flux', 'Pulse', 'Spark'];
+    const neonColorHex = ['#FF00FF', '#00FF00', '#FFFF00', '#FF4444', '#00FFFF'];
+    const cosmicColors = ['Stellar', 'Nebula', 'Cosmo', 'Astral', 'Nova'];
+    const cosmicColorHex = ['#4B0082', '#800080', '#000033', '#483D8B', '#9400D3'];
+
+    const baseAnimals = ['Ant', 'Badger', 'Bear', 'Beetle', 'Bird', 'Cat', 'Dog', 'Fox'];
+    const baseAnimalEmojis = ['🐜', '🦡', '🐻', '🪲', '🐦', '🐈', '🐕', '🦊'];
+
+    const mythicalAnimals = ['Unicorn', 'Dragon', 'Phoenix', 'Dinosaur', 'Mermaid'];
+    const mythicalAnimalEmojis = ['🦄', '🐉', '🐦‍🔥', '🦖', '🧜'];
+
+    const cosmicPrefixes = ['Cloud', 'Star', 'Moon', 'Crystal', 'Plasma'];
+    const cosmicPrefixEmojis = ['☁️', '⭐', '🌙', '🔮', '⚡️'];
+    const cosmicAnimals = ['Jellysquirrel', 'Stardragon', 'Moonbear', 'Crystalfox', 'Plasmabird'];
+    const cosmicAnimalEmojis = ['🪼🐿️', '⭐🐉', '🌙🐻', '🔮🦊', '⚡️🐦'];
 
     function invertColor(color) {
       return '#' + ("000000" + (0xFFFFFF ^ parseInt(color.substring(1), 16)).toString(16)).slice(-6);
     }
 
-    let currentNames = []; // Store current names globally
+    let currentNames = [];
+    let currentMode = 'normal-mode';
 
     function generateNames() {
       const nameOptions = document.getElementById('name-options');
       nameOptions.innerHTML = '';
       currentNames = [];
+
+      let adjectives, colors, colorHex, animals, animalEmojis;
+      switch (currentMode) {
+        case 'prismatic-mode':
+          adjectives = [...baseAdjectives, ...prismaticAdjectives];
+          colors = [...baseColors, ...prismaticColors];
+          colorHex = [...baseColorHex, ...prismaticColorHex];
+          animals = [...baseAnimals, ...mythicalAnimals];
+          animalEmojis = [...baseAnimalEmojis, ...mythicalAnimalEmojis];
+          break;
+        case 'neon-mode':
+          adjectives = [...baseAdjectives, ...neonAdjectives];
+          colors = [...baseColors, ...neonColors];
+          colorHex = [...baseColorHex, ...neonColorHex];
+          animals = [...baseAnimals, ...mythicalAnimals];
+          animalEmojis = [...baseAnimalEmojis, ...mythicalAnimalEmojis];
+          break;
+        case 'cosmic-mode':
+          adjectives = [...baseAdjectives, ...cosmicAdjectives];
+          colors = [...baseColors, ...cosmicColors];
+          colorHex = [...baseColorHex, ...cosmicColorHex];
+          animals = cosmicAnimals;
+          animalEmojis = cosmicAnimalEmojis;
+          break;
+        default: // normal-mode and bw-mode
+          adjectives = baseAdjectives;
+          colors = baseColors;
+          colorHex = baseColorHex;
+          animals = baseAnimals;
+          animalEmojis = baseAnimalEmojis;
+      }
+
       while (currentNames.length < 3) {
-        const adj = adjective[Math.floor(Math.random() * adjective.length)];
-        const colIndex = Math.floor(Math.random() * tnm1.length);
-        const col = tnm1[colIndex];
-        const aniIndex = Math.floor(Math.random() * tnm3.length);
-        const ani = tnm3[aniIndex];
-        const emoji = tnm4[aniIndex];
+        const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        const colIndex = Math.floor(Math.random() * colors.length);
+        const col = colors[colIndex];
+        const aniIndex = Math.floor(Math.random() * animals.length);
+        const ani = animals[aniIndex];
+        const emoji = animalEmojis[aniIndex];
         const name = `${adj} ${col} ${ani} ${emoji}`;
         if (!currentNames.includes(name)) {
-          const coloration = tnm2[colIndex];
+          const coloration = colorHex[colIndex];
           const hexbg = invertColor(coloration);
           const button = document.createElement('button');
-          button.className = 'name-button';
+          button.className = `name-button ${currentMode}`;
           button.textContent = name;
           button.dataset.originalColor = hexbg;
           button.dataset.originalBg = coloration;
-          button.style.color = hexbg;
           button.style.backgroundColor = coloration;
           button.onclick = () => selectName(name, hexbg);
-          button.onmouseover = () => {
-            button.style.color = '#FFFFFF';
-            setTimeout(() => { button.style.color = button.dataset.originalColor; }, 10000); // 10 seconds = 100ms * 100
-          };
           currentNames.push({name, color: hexbg, bg: coloration});
           nameOptions.appendChild(button);
         }
@@ -176,38 +318,27 @@
       selectedName.style.color = color;
     }
 
-    // Black and White toggle
-    let isBWMode = false;
-    document.getElementById('bw-toggle').onclick = () => {
-      isBWMode = !isBWMode;
-      const body = document.body;
+    function setMode(mode) {
       const picker = document.getElementById('name-picker');
       const buttons = document.getElementsByClassName('name-button');
-      const selectedName = document.getElementById('selected-name');
-      
-      if (isBWMode) {
-        body.classList.add('bw-mode');
-        picker.classList.add('bw-mode');
-        for (let button of buttons) {
-          button.classList.add('bw-mode');
-        }
-        selectedName.classList.add('bw-mode');
-      } else {
-        body.classList.remove('bw-mode');
-        picker.classList.remove('bw-mode');
-        for (let i = 0; i < buttons.length; i++) {
-          buttons[i].classList.remove('bw-mode');
-          buttons[i].style.color = currentNames[i].color;
-          buttons[i].style.backgroundColor = currentNames[i].bg;
-        }
-        selectedName.classList.remove('bw-mode');
+      picker.className = 'normal-mode'; // Reset to normal
+      picker.classList.add(mode);
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].className = `name-button ${mode}`;
+        buttons[i].style.backgroundColor = currentNames[i].bg;
       }
-    };
+      currentMode = mode;
+      generateNames(); // Regenerate with mode-specific names
+    }
 
+    document.getElementById('normal-mode').onclick = () => setMode('normal-mode');
+    document.getElementById('bw-mode').onclick = () => setMode('bw-mode');
+    document.getElementById('prismatic-mode').onclick = () => setMode('prismatic-mode');
+    document.getElementById('neon-mode').onclick = () => setMode('neon-mode');
+    document.getElementById('cosmic-mode').onclick = () => setMode('cosmic-mode');
     document.getElementById('reroll-button').onclick = generateNames;
 
-    // Generate initial names on page load
-    generateNames();
+    generateNames(); // Start in Normal mode
   </script>
 </body>
 </html>
