@@ -78,6 +78,7 @@
       cursor: pointer;
       transition: background-color 0.3s;
       position: relative;
+      white-space: pre-wrap; /* Ensures newlines are respected */
     }
 
     .normal-mode .name-button {
@@ -115,13 +116,13 @@
     }
 
     @keyframes prismaticSmooth {
-      0% { background-color: #FF0000; }    /* Red */
-      16.67% { background-color: #FF8800; } /* Orange */
-      33.33% { background-color: #FFFF00; } /* Yellow */
-      50% { background-color: #00FF00; }   /* Green */
-      66.67% { background-color: #0000FF; } /* Blue */
-      83.33% { background-color: #4B0082; } /* Indigo */
-      100% { background-color: #FF00FF; }  /* Violet */
+      0% { background-color: #FF0000; }    /* Fire (Red) */
+      16.67% { background-color: #FF8800; } /* Fire (Orange) */
+      33.33% { background-color: #00FFFF; } /* Water (Cyan) */
+      50% { background-color: #00FF00; }   /* Earth (Green) */
+      66.67% { background-color: #87CEEB; } /* Air (Light Blue) */
+      83.33% { background-color: #0000FF; } /* Water (Blue) */
+      100% { background-color: #FF00FF; }  /* Mixed (Violet) */
     }
 
     @keyframes sparkle {
@@ -237,8 +238,38 @@
 
     const baseColors = ['Amber', 'Amethyst', 'Aqua', 'Azure', 'Crimson', 'Emerald', 'Gold', 'Indigo'];
     const baseColorHex = ['#FFBF00', '#9966cc', '#00FFFF', '#007FFF', '#DC143C', '#50C878', '#FFD700', '#4B0082'];
-    const prismaticColors = ['Rainbow', 'Prismatic', 'Iridescent', 'Chroma', 'Spectrum'];
-    const prismaticColorHex = ['#FF0000', '#FF00FF', '#00FFFF', '#FFFF00', '#00FF00'];
+
+    const prismaticColors = [
+      // Fire
+      'Blazing', 'Fiery', 'Scorching', 'Flaming', 'Burning', 'Ember', 'Infernal', 'Searing', 'Ignited', 'Torch',
+      // Water
+      'Icy', 'Frosty', 'Glacial', 'Chilly', 'Aqueous', 'Marine', 'Tidal', 'Oceanic', 'Dewy', 'Misty',
+      // Air
+      'Breezy', 'Windy', 'Gusty', 'Aerial', 'Zephyr', 'Stormy', 'Whirling', 'Drafty', 'Tempest', 'Cyclonic',
+      // Earth
+      'Rocky', 'Stony', 'Earthen', 'Muddy', 'Clay', 'Sandy', 'Pebble', 'Craggy', 'Rugged', 'Boulder'
+    ];
+    const prismaticColorHex = [
+      // Fire (10)
+      '#FF0000', '#FF3300', '#FF5500', '#FF7700', '#FF9900', '#FFBB00', '#FFDD00', '#FFEE00', '#FFCC00', '#FFAA00',
+      // Water (10)
+      '#00FFFF', '#00E0E0', '#00C0C0', '#00A0A0', '#008080', '#006060', '#004040', '#002020', '#00B7EB', '#00CED1',
+      // Air (10)
+      '#87CEEB', '#ADD8E6', '#B0E0E6', '#87CEFA', '#B0C4DE', '#A1CAF1', '#89CFF0', '#73C2FB', '#5F9EA0', '#4682B4',
+      // Earth (10)
+      '#00FF00', '#32CD32', '#228B22', '#006400', '#008000', '#2E8B57', '#3CB371', '#66CDAA', '#8FBC8F', '#20B2AA'
+    ];
+    const prismaticEmojis = [
+      // Fire (10)
+      '🔥', '🔥', '🔥', '🔥', '🔥', '🔥', '🔥', '🔥', '🔥', '🔥',
+      // Water (10)
+      '❄️', '❄️', '❄️', '❄️', '💧', '💧', '🌊', '🌊', '💦', '💦',
+      // Air (10)
+      '💨', '💨', '💨', '🌬️', '🌬️', '🌪️', '🌪️', '🍃', '🍃', '🌬️',
+      // Earth (10)
+      '🌍', '🪨', '🪨', '🌱', '🌱', '🌿', '🌿', '🌳', '🌳', '🍂'
+    ];
+
     const neonColors = ['Neon', 'Glow', 'Flux', 'Pulse', 'Spark'];
     const neonColorHex = ['#FF00FF', '#00FF00', '#FFFF00', '#FF4444', '#00FFFF'];
     const cosmicColors = ['Stellar', 'Nebula', 'Cosmo', 'Astral', 'Nova'];
@@ -267,14 +298,15 @@
       nameOptions.innerHTML = '';
       currentNames = [];
 
-      let adjectives, colors, colorHex, animals, animalEmojis;
+      let adjectives, colors, colorHex, animals, animalEmojis, extraEmojis;
       switch (currentMode) {
         case 'prismatic-mode':
           adjectives = [...baseAdjectives, ...prismaticAdjectives];
-          colors = [...baseColors, ...prismaticColors];
-          colorHex = [...baseColorHex, ...prismaticColorHex];
+          colors = prismaticColors;
+          colorHex = prismaticColorHex;
           animals = [...baseAnimals, ...mythicalAnimals];
           animalEmojis = [...baseAnimalEmojis, ...mythicalAnimalEmojis];
+          extraEmojis = prismaticEmojis;
           break;
         case 'neon-mode':
           adjectives = [...baseAdjectives, ...neonAdjectives];
@@ -282,6 +314,7 @@
           colorHex = [...baseColorHex, ...neonColorHex];
           animals = [...baseAnimals, ...mythicalAnimals];
           animalEmojis = [...baseAnimalEmojis, ...mythicalAnimalEmojis];
+          extraEmojis = null;
           break;
         case 'cosmic-mode':
           adjectives = [...baseAdjectives, ...cosmicAdjectives];
@@ -289,6 +322,7 @@
           colorHex = [...baseColorHex, ...cosmicColorHex];
           animals = cosmicAnimals;
           animalEmojis = cosmicAnimalEmojis;
+          extraEmojis = null;
           break;
         default: // normal-mode and bw-mode
           adjectives = baseAdjectives;
@@ -296,6 +330,7 @@
           colorHex = baseColorHex;
           animals = baseAnimals;
           animalEmojis = baseAnimalEmojis;
+          extraEmojis = null;
       }
 
       while (currentNames.length < 3) {
@@ -305,7 +340,10 @@
         const aniIndex = Math.floor(Math.random() * animals.length);
         const ani = animals[aniIndex];
         const emoji = animalEmojis[aniIndex];
-        const name = `${adj} ${col} ${ani} ${emoji}`;
+        const extraEmoji = extraEmojis ? extraEmojis[colIndex] : '';
+        const name = currentMode === 'cosmic-mode' || currentMode === 'prismatic-mode'
+          ? `${adj} ${col} ${ani}\n${extraEmoji}${emoji}`
+          : `${adj} ${col} ${ani} ${emoji}`;
         if (!currentNames.includes(name)) {
           const coloration = colorHex[colIndex];
           const hexbg = invertColor(coloration);
@@ -315,7 +353,7 @@
           button.dataset.originalColor = hexbg;
           button.dataset.originalBg = coloration;
           button.style.backgroundColor = coloration;
-          button.style.setProperty('--button-bg', coloration); // Set custom property for neon glow
+          button.style.setProperty('--button-bg', coloration);
           button.onclick = () => selectName(name, hexbg);
           currentNames.push({name, color: hexbg, bg: coloration});
           nameOptions.appendChild(button);
@@ -337,10 +375,10 @@
       for (let i = 0; i < buttons.length; i++) {
         buttons[i].className = `name-button ${mode}`;
         buttons[i].style.backgroundColor = currentNames[i].bg;
-        buttons[i].style.setProperty('--button-bg', currentNames[i].bg); // Update neon glow color
+        buttons[i].style.setProperty('--button-bg', currentNames[i].bg);
       }
       currentMode = mode;
-      generateNames(); // Regenerate with mode-specific names
+      generateNames();
     }
 
     document.getElementById('normal-mode').onclick = () => setMode('normal-mode');
